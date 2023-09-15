@@ -1,6 +1,8 @@
 package com.example.byteblog.controller;
 
+import com.example.byteblog.dto.ApiResponse;
 import com.example.byteblog.dto.PostDto;
+import com.example.byteblog.dto.PostResponse;
 import com.example.byteblog.model.Post;
 import com.example.byteblog.repository.PostRepository;
 import com.example.byteblog.service.PostService;
@@ -45,6 +47,37 @@ public class PostController {
         List<PostDto> posts=postService.getPostsByCategory(categoryId);
         return new ResponseEntity<List<PostDto>>(posts,HttpStatus.OK);
 
+    }
+
+    //get all posts(Implement paging)
+    @GetMapping("/posts")
+    //pagenumber starts from 0
+    public ResponseEntity<PostResponse> getAllPosts(
+            @RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
+        PostResponse getPosts=postService.getAllPosts(pageNumber,pageSize);
+        return new ResponseEntity<PostResponse>(getPosts, HttpStatus.OK);
+    }
+
+    //get a post
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId){
+        PostDto postDto=postService.getPostById(postId);
+        return new ResponseEntity<>(postDto, HttpStatus.OK);
+    }
+
+    //delete
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse> deletePostById(@PathVariable Long postId){
+        postService.deletePost(postId);
+        return new ResponseEntity<ApiResponse>(new ApiResponse("Post is successfully deleted !!", true), OK);
+    }
+
+    //update post
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Long postId){
+        PostDto updatePost=postService.updatePost(postDto,postId);
+        return new ResponseEntity<PostDto>(updatePost,  HttpStatus.OK);
     }
 
 }

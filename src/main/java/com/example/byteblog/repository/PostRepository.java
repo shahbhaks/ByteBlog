@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface PostRepository extends JpaRepository<Post,Long> {
 
    // custom methods
-    List<Post> findAllByCategory(Category category);
-    List<Post> findAllByUser(User user);
+    List<Post> findByCategory(Category category);
+    List<Post> findByUser(User user);
 }

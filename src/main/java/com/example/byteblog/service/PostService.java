@@ -1,6 +1,7 @@
 package com.example.byteblog.service;
 
 import com.example.byteblog.dto.PostDto;
+import com.example.byteblog.dto.PostResponse;
 import com.example.byteblog.model.Category;
 import com.example.byteblog.model.User;
 
@@ -20,8 +21,9 @@ public interface PostService {
     //get single post
     PostDto getPostById(Long postId);
 
-    //get all
-    List<PostDto> getAllPosts();
+    //get all posts
+    //Implement paging
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
 
     //get all post by category
     List<PostDto> getPostsByCategory(Long categoryId);

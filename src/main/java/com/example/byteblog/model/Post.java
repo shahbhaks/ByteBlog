@@ -5,11 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Post extends BaseModel{
 
     @Column(name="post_title", length=100, nullable = false)
@@ -21,11 +23,11 @@ public class Post extends BaseModel{
     private String imageName;
 
     @ManyToOne
-    @JoinColumn(name="cat_Id")
+    @JoinColumn(name="categoryId")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name="usr_Id")
+    @JoinColumn(name="userId")
     private User user;
 
 }

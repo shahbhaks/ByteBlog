@@ -1,6 +1,7 @@
 package com.example.byteblog.service;
 
 import com.example.byteblog.dto.PostDto;
+import com.example.byteblog.dto.PostResponse;
 import com.example.byteblog.exception.ResourceNotFoundException;
 import com.example.byteblog.model.Category;
 import com.example.byteblog.model.Post;
@@ -10,6 +11,9 @@ import com.example.byteblog.repository.PostRepository;
 import com.example.byteblog.repository.UserRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,43 +37,70 @@ public class PostServiceImpl implements PostService{
                 .orElseThrow(()->new ResourceNotFoundException("User not found with this id :" + userId));
         Category category=categoryRepo.findById(categoryId)
                 .orElseThrow(()->new ResourceNotFoundException("Category not found with this id:" + categoryId));
-        Post post=modelMapper.map(postDto,Post.class);
+        Post post=dtoToPost(postDto);
         post.setImageName("default.png");
         post.setUser(user);
         post.setCategory(category);
 
         Post newPost=postRepository.save(post);
-        return modelMapper.map(newPost,PostDto.class);
+        return postToDto(newPost);
     }
 
     @Override
     public PostDto updatePost(PostDto postDto, Long postId) {
-//        postRepository.find
-//        return postToDto(updatedPost);
-        return null;
+        Post post=postRepository.findById(postId)
+                .orElseThrow(()->new RuntimeException("Post not found with this id :" + postId));
+
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setImageName(postDto.getImageName());
+
+        Post updatedPost=postRepository.save(post);
+
+        return postToDto(updatedPost);
     }
 
     @Override
     public void deletePost(Long postId) {
+        Post post=postRepository.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("Post not found with this id :" + postId));
+        postRepository.delete(post);
 
     }
 
     @Override
     public PostDto getPostById(Long postId) {
-        return null;
+        Post post= postRepository.findById(postId)
+                .orElseThrow(()->new ResourceNotFoundException("Post not found with this id : " + postId));
+        return postToDto(post);
     }
 
+    //Implementented paging
     @Override
-    public List<PostDto> getAllPosts() {
-        return null;
+    public PostResponse getAllPosts(Integer pageNumber, Integer pageSize) {
+        Pageable p= PageRequest.of(pageNumber,pageSize);
+
+        Page<Post> pagePost =postRepository.findAll(p);
+        List<Post> allPosts=pagePost.getContent();
+
+        List<PostDto> postDtos=allPosts.stream().map(post->modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
+
+        PostResponse postResponse=new PostResponse();
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagePost.getNumber());
+        postResponse.setPageSize(pagePost.getSize());
+        postResponse.setTotalElements(pagePost.getTotalElements());
+        postResponse.setTotalPages(pagePost.getTotalPages());
+        postResponse.setLastPage(pagePost.isLast());
+        return postResponse;
     }
 
     @Override
     public List<PostDto> getPostsByCategory(Long categoryId) {
-        Category category=categoryRepo.findById(categoryId)
+        Category cat=categoryRepo.findById(categoryId)
                         .orElseThrow(()->new ResourceNotFoundException("Category not found with this id :" + categoryId));
-        List<Post> posts=postRepository.findAllByCategory(category);
-        List<PostDto> postDtos=posts.stream().map((post)->modelMapper.map(posts,PostDto.class)).collect(Collectors.toList());
+        List<Post> posts=postRepository.findByCategory(cat);
+        List<PostDto> postDtos=posts.stream().map((post)->modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
         return postDtos;
     }
 
@@ -77,15 +108,18 @@ public class PostServiceImpl implements PostService{
     public List<PostDto> getPostsByUser(Long userId) {
         User user=userRepo.findById(userId)
                 .orElseThrow(()->new ResourceNotFoundException("User not found with this id :" + userId));
-        List<Post> posts=postRepository.findAllByUser(user);
-        List<PostDto> postDtos=posts.stream().map((post)->modelMapper.map(posts,PostDto.class)).collect(Collectors.toList());
+        List<Post> posts=postRepository.findByUser(user);
+        List<PostDto> postDtos=posts.stream().map((post)->modelMapper.map(post,PostDto.class)).collect(Collectors.toList());
         return postDtos;
     }
 
     @Override
     public List<PostDto> searchPosts(String keyword) {
+
         return null;
     }
+
+
 
     //Mapping
    public Post dtoToPost(PostDto postDto){
