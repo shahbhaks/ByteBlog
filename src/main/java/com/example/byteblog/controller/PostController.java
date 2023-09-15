@@ -49,13 +49,15 @@ public class PostController {
 
     }
 
-    //get all posts(Implement paging)
+    //get all posts(Implement paging & sorting by title/content(by default-id))
     @GetMapping("/posts")
     //pagenumber starts from 0
     public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize){
-        PostResponse getPosts=postService.getAllPosts(pageNumber,pageSize);
+            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize,
+            @RequestParam(value="sortBy", defaultValue="postId",required=false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDirection ){
+        PostResponse getPosts=postService.getAllPosts(pageNumber,pageSize,sortBy,sortDirection);
         return new ResponseEntity<PostResponse>(getPosts, HttpStatus.OK);
     }
 

@@ -23,7 +23,7 @@ public interface PostService {
 
     //get all posts
     //Implement paging
-    PostResponse getAllPosts(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPosts(Integer pageNumber, Integer pageSize,String sortBy, String sortDir);
 
     //get all post by category
     List<PostDto> getPostsByCategory(Long categoryId);
