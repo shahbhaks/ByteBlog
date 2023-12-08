@@ -12,19 +12,18 @@ import java.util.Date;
 
 import static jakarta.persistence.GenerationType.AUTO;
 
-@Getter
-@Setter
+@Data
 @MappedSuperclass
 public class BaseModel {
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @CreatedDate
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date createdAt;
-
-    @LastModifiedDate
-    @Temporal(value = TemporalType.TIMESTAMP)
-    private Date updatedAt;
+//    @CreatedDate
+//    @Temporal(value = TemporalType.TIMESTAMP)
+//    private Date createdAt;
+//
+//    @LastModifiedDate
+//    @Temporal(value = TemporalType.TIMESTAMP)
+//    private Date updatedAt;
 }

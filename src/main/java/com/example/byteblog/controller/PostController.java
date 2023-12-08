@@ -1,5 +1,6 @@
 package com.example.byteblog.controller;
 
+import com.example.byteblog.config.AppConstants;
 import com.example.byteblog.dto.ApiResponse;
 import com.example.byteblog.dto.PostDto;
 import com.example.byteblog.dto.PostResponse;
@@ -49,14 +50,14 @@ public class PostController {
 
     }
 
-    //get all posts(Implement paging & sorting by title/content(by default-id))
+    //get all posts(Implemented paging & sorting by title/content(by default-id))
     @GetMapping("/posts")
     //pagenumber starts from 0
     public ResponseEntity<PostResponse> getAllPosts(
-            @RequestParam(value = "pageNumber",defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize,
-            @RequestParam(value="sortBy", defaultValue="postId",required=false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDirection ){
+            @RequestParam(value = "pageNumber",defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(value="sortBy", defaultValue = AppConstants.SORT_BY,required=false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDirection ){
         PostResponse getPosts=postService.getAllPosts(pageNumber,pageSize,sortBy,sortDirection);
         return new ResponseEntity<PostResponse>(getPosts, HttpStatus.OK);
     }
@@ -65,7 +66,7 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long postId){
         PostDto postDto=postService.getPostById(postId);
-        return new ResponseEntity<>(postDto, HttpStatus.OK);
+        return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
     }
 
     //delete

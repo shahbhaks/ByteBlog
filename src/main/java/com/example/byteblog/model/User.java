@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,4 +23,12 @@ public class User extends BaseModel{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Post> posts;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="user_role",
+            joinColumns=@JoinColumn(name = "user",referencedColumnName = "id" ),
+            inverseJoinColumns=@JoinColumn(name="role", referencedColumnName = "id"))
+    private List<Role> roles;
+
+
 }

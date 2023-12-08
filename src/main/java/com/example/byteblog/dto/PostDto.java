@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import java.util.*;
+
+@Data
 public class PostDto {
     private Long postId;
 
@@ -15,10 +15,14 @@ public class PostDto {
 
     private String content;
 
+   // private Date addedDate;
+
     private String imageName;
 
     private CategoryDto category;
 
     private UserDto user;
+
+    private List<CommentDto> comments;
 
 }

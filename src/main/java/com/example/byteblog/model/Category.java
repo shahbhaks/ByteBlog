@@ -15,7 +15,7 @@ public class Category extends BaseModel {
 
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL,fetch = FetchType.LAZY) //cascade(All)--->if we remove parent,child also gets removed
+    @OneToMany(mappedBy = "category") //cascade(All)--->if we remove parent,child also gets removed
     private List<Post> posts;
 
 }
