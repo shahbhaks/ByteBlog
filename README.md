@@ -1,6 +1,6 @@
 # ByteBlog
 Description:
-Designed and developed a robust REST API for an Online Blogging Application using Java with SpringBoot, Hibernate, Maven, J.D.B.C, and MySQL Database. The system encompasses fundamental functionalities essential for a modern blogging platform.
+Designed and developed a robust REST API for an Online Blogging Application using Java with SpringBoot, Hibernate, Maven and MySQL Database. The system encompasses fundamental functionalities essential for a modern blogging platform.
 
 Key Achievements:
 1.Implemented comprehensive CRUD operations for blog management, enabling users to create, read, update, and delete blog posts efficiently.
